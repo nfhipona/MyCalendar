@@ -5,7 +5,7 @@
 //  Created by Neil Francis Hipona on 8/5/22.
 //
 
-import Foundation
+import SwiftUI
 
 public struct MyCalendarGenerator {
   public typealias Weekday = MyCalendarComponents.Weekday
@@ -202,7 +202,7 @@ public extension MyCalendarGenerator {
    * Generates calendar days collection with offset days
    */
   func generateCalendarDaysCollection(for monthYear: MyCalendarMonthYearData,
-                                      selectedDate: Date = .now,
+                                      selectedDate: Date = Date(),
                                       enableFutureWeeksOfCurrentMonth: Bool = true,
                                       enableFutureDateOnCurrentMonth: Bool) -> [DaysRowModel] {
     let month = monthYear.month.value

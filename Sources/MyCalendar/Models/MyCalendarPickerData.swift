@@ -5,7 +5,7 @@
 //  Created by Neil Francis Hipona on 8/5/22.
 //
 
-import Foundation
+import SwiftUI
 
 public struct MyCalendarPickerData<T: Hashable>: Identifiable, Hashable {
   public let id: Int
@@ -19,7 +19,7 @@ public struct MyCalendarPickerData<T: Hashable>: Identifiable, Hashable {
   }
   
   public static func == (lhs: MyCalendarPickerData<T>,
-                  rhs: MyCalendarPickerData<T>) -> Bool {
+                         rhs: MyCalendarPickerData<T>) -> Bool {
     return lhs.id == rhs.id && lhs.title == rhs.title && lhs.value == rhs.value
   }
   

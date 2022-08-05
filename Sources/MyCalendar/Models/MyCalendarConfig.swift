@@ -5,7 +5,7 @@
 //  Created by Neil Francis Hipona on 8/5/22.
 //
 
-import Foundation
+import SwiftUI
 
 // MARK: - Calendar Config
 public struct MyCalendarConfig {
