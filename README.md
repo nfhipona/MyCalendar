@@ -1,3 +1,4 @@
 # MyCalendar
+Test App: [MyCustomCalendar](https://github.com/nferocious76/MyCustomCalendar)
 
-A description of this package.
+`MyCalendar` is a an SPM package custom calendar for SwiftUI projects
