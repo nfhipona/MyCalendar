@@ -5,7 +5,7 @@
 //  Created by Neil Francis Hipona on 8/5/22.
 //
 
-import Foundation
+import SwiftUI
 
 public protocol MyCalendarFormatterStyleProtocol {
   var weekdayLabel: String { get }

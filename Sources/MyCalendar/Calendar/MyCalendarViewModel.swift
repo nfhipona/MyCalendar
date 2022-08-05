@@ -31,13 +31,13 @@ public class MyCalendarViewModel: ObservableObject {
   private var cancellables = Set<AnyCancellable>()
   
   public init(config: MyCalendarConfig,
-       generator: MyCalendarGenerator,
-       pickerModel: MyCalendarMonthYearPickerViewModel,
-       
-       initialDate: Date = Date(),
-       enableFutureNavigation: Bool = true,
-       enableFutureWeeksOfCurrentMonth: Bool = true,
-       enableFutureDateOnCurrentMonth: Bool = false) {
+              generator: MyCalendarGenerator,
+              pickerModel: MyCalendarMonthYearPickerViewModel,
+              
+              initialDate: Date = Date(),
+              enableFutureNavigation: Bool = true,
+              enableFutureWeeksOfCurrentMonth: Bool = true,
+              enableFutureDateOnCurrentMonth: Bool = false) {
     
     self.config = config
     self.generator = generator

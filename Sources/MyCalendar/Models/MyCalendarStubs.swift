@@ -5,7 +5,7 @@
 //  Created by Neil Francis Hipona on 8/5/22.
 //
 
-import Foundation
+import SwiftUI
 
 // MARK: - Calendar Config
 public extension MyCalendarConfig {
@@ -85,7 +85,7 @@ public extension MyCalendarViewModel {
                                                        generator: generator,
                                                        monthYear: .stub,
                                                        isPickerEnabled: true),
-                                    initialDate: .now,
+                                    initialDate: Date(),
                                     enableFutureNavigation: false,
                                     enableFutureWeeksOfCurrentMonth: false,
                                     enableFutureDateOnCurrentMonth: false)

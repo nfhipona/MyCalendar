@@ -16,8 +16,8 @@ public struct MyCalendarMonthYearPickerView: View {
   @State private var yearSelection: Int = 0
   
   public init(model: MyCalendarMonthYearPickerViewModel,
-       geometry: GeometryProxy,
-       padding: CGFloat = 24) {
+              geometry: GeometryProxy,
+              padding: CGFloat = 24) {
     
     self.model = model
     self.geometry = geometry

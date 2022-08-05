@@ -20,9 +20,9 @@ public class MyCalendarMonthYearPickerViewModel: ObservableObject {
   public let monthYearPublisher = PassthroughSubject<MyCalendarMonthYearData, Never>()
   
   public init(config: MyCalendarPickerConfig,
-       generator: MyCalendarGenerator,
-       monthYear: MyCalendarMonthYearData,
-       isPickerEnabled: Bool = true) {
+              generator: MyCalendarGenerator,
+              monthYear: MyCalendarMonthYearData,
+              isPickerEnabled: Bool = true) {
     
     self.config = config
     self.generator = generator
