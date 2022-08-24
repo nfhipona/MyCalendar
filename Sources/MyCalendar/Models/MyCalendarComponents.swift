@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+public protocol RowStateProtocol {
+  var stateColor: Color{ get }
+}
+
 public struct MyCalendarComponents {
   public enum Weekday: Int, CaseIterable {
     case sunday = 1
@@ -18,17 +22,17 @@ public struct MyCalendarComponents {
     case saturday
   }
   
-  public enum RowState {
+  public enum RowState: RowStateProtocol {
     case `default`
-    case rejected
+    case selected
     case warning
     
-    var stateColor: Color {
+    public var stateColor: Color {
       switch self {
       case .warning:
         return .orange
-      case .rejected:
-        return .red
+      case .selected:
+        return .yellow
       default:
         return .clear
       }
@@ -83,15 +87,16 @@ public struct MyCalendarComponents {
     
     let id: UUID
     let rows: [DayModel]
-    let state: RowState
+    let state: RowStateProtocol
     let isRowDisabled: Bool
     
-    init(formatter: MyCalendarFormatterProtocol,
+    init(id: UUID = UUID(),
+         formatter: MyCalendarFormatterProtocol,
          rows: [DayModel],
-         state: RowState,
+         state: RowStateProtocol,
          isRowDisabled: Bool = false) {
       
-      self.id = UUID()
+      self.id = id
       self.formatter = formatter
       self.rows = rows
       self.state = state
@@ -116,7 +121,16 @@ public struct MyCalendarComponents {
     }
     
     func updateRows(with rows: [DayModel]) -> DaysRowModel {
-      return .init(formatter: formatter,
+      return .init(id: id,
+                   formatter: formatter,
+                   rows: rows,
+                   state: state,
+                   isRowDisabled: isRowDisabled)
+    }
+    
+    func updateRowState(with state: RowStateProtocol) -> DaysRowModel {
+      return .init(id: id,
+                   formatter: formatter,
                    rows: rows,
                    state: state,
                    isRowDisabled: isRowDisabled)

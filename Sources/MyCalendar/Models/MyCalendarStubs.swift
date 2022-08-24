@@ -58,7 +58,8 @@ public extension MyCalendarGenerator {
     calendar.timeZone = .current
     return .init(calendar: calendar,
                  formatter: MyCalendarFormatter.stub,
-                 startOfWeek: .sunday)
+                 startOfWeek: .sunday,
+                 rowState: MyCalendarComponents.RowState.default)
   }()
 }
 
@@ -78,7 +79,8 @@ public extension MyCalendarViewModel {
     calendar.timeZone = .current
     let generator: MyCalendarGenerator = .init(calendar: calendar,
                                                formatter: MyCalendarFormatter.stub,
-                                               startOfWeek: .monday)
+                                               startOfWeek: .monday,
+                                               rowState: MyCalendarComponents.RowState.default)
     let model = MyCalendarViewModel(config: .stub,
                                     generator: generator,
                                     pickerModel: .init(config: .stub,

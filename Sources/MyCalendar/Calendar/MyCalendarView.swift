@@ -31,14 +31,14 @@ public struct MyCalendarView: View {
           Spacer()
           buildMonthNavigationButtonViewStack()
         }
-        .frame(width: contentWidth, height: 20, alignment: .center)
       }
+      .frame(minWidth: contentWidth, minHeight: 20, alignment: .center)
       
       VStack {
         drawDaysOfTheMonthTitleViewStack(contentWidth: contentWidth)
         drawDaysOfTheMonthPageViewStack(contentWidth: contentWidth)
       }
-      .padding(.vertical, 25)
+      .padding(.vertical, padding)
       .overlay(monthYearPickerViewStack())
     }
     .padding(.horizontal, padding)
@@ -330,9 +330,20 @@ private extension MyCalendarView {
 }
 
 public struct MyCalendarView_Previews: PreviewProvider {
+  typealias RowState = MyCalendarComponents.RowState
+  public static var model: MyCalendarViewModel = .stub
   public static var previews: some View {
     GeometryReader { geometry in
-      MyCalendarView(model: .stub, geometry: geometry)
+      MyCalendarView(model: model, geometry: geometry)
+        .onReceive(model.selectedDayPublisher) { output in
+          
+        }
+        .onReceive(model.selectedDatePublisher) { output in
+          
+        }
+        .onAppear {
+          model.updateRowState(with: Date(), rowState: RowState.warning)
+        }
     }
   }
 }

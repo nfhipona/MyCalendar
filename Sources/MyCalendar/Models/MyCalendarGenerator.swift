@@ -15,18 +15,21 @@ public struct MyCalendarGenerator {
   let calendar: Calendar
   let formatter: MyCalendarFormatterProtocol
   let startOfWeek: Weekday
+  let rowState: RowStateProtocol
   let minYear: Int
   let maxYear: Int
   
   init(calendar: Calendar,
        formatter: MyCalendarFormatterProtocol,
        startOfWeek: Weekday = .sunday,
+       rowState: RowStateProtocol,
        minYear: Int = 5,
        maxYear: Int = 10) {
     
     self.calendar = calendar
     self.formatter = formatter
     self.startOfWeek = startOfWeek
+    self.rowState = rowState
     self.minYear = minYear
     self.maxYear = maxYear
   }
@@ -250,7 +253,7 @@ public extension MyCalendarGenerator {
       
       daysCollection.append(DaysRowModel(formatter: formatter,
                                          rows: daysRow,
-                                         state: .default,
+                                         state: rowState,
                                          isRowDisabled: isRowDisabled))
     }
     

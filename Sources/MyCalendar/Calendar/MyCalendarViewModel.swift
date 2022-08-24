@@ -22,7 +22,8 @@ public class MyCalendarViewModel: ObservableObject {
   @Published internal var datesTempLeft: [DaysRowModel] = []
   @Published internal var datesTempRight: [DaysRowModel] = []
   @Published var monthYear: MyCalendarMonthYearData
-  let activeMonthDatePublisher = PassthroughSubject<Date, Never>()
+  public let selectedDatePublisher = PassthroughSubject<Date, Never>()
+  public let selectedDayPublisher = PassthroughSubject<DayModel, Never>()
   
   private let enableFutureNavigation: Bool
   /// `enableFutureWeeksOfCurrentMonth` will override settings for `enableFutureDateOnCurrentMonth`. Default value is `true`.
@@ -59,8 +60,13 @@ public extension MyCalendarViewModel {
     if !enableFutureNavigation {
       let calendarMonth = generator.calendar
         .component(.month, from: Date())
-      let activeMonth = monthYear.month.value
-      return activeMonth < calendarMonth
+      let calendarYear = generator.calendar
+        .component(.year, from: Date())
+      if monthYear.year.value < calendarYear {
+          return true
+      } else {
+        return monthYear.month.value < calendarMonth
+      }
     }
     return true
   }
@@ -89,6 +95,34 @@ public extension MyCalendarViewModel {
   }
 }
 
+public extension MyCalendarViewModel {
+  func updateRowState(with model: DayModel, rowState state: RowStateProtocol) {
+    dates = updateRowState(of: dates, with: model, rowState: state)
+  }
+  
+  func updateRowState(with date: Date, rowState state: RowStateProtocol) {
+    dates = updateRowState(of: dates, with: date, rowState: state)
+  }
+  
+  /**
+   * Used by the calendar to update and notify itself on user's request
+   */
+  func selectDate(with date: Date) {
+    let month = generator.calendar
+      .component(.month, from: date)
+    let monthData = generator.generateMonthData(for: month)
+    
+    let year = generator.calendar
+      .component(.year, from: date)
+    let yearData = generator.generateYearData(for: year)
+    
+    monthYear = .init(month: monthData, year: yearData)
+    selectedDate = date
+    generateDaysCollectionPage(for: date)
+    selectedDatePublisher.send(date)
+  }
+}
+
 internal extension MyCalendarViewModel {
   func navigatePreviousMonth() {
     monthYear = generator.previousMonth(of: monthYear)
@@ -102,6 +136,13 @@ internal extension MyCalendarViewModel {
     generateDaysCollectionPage(for: selectedDate)
   }
   
+  func updatePickerMonthYear() {
+    pickerModel.updateMonthYear(with: monthYear)
+  }
+  
+  /**
+   * Used by the calendar itself on user's tap on calendar dates
+   */
   func selectDate(with model: DayModel) {
     var datesTmp: [DaysRowModel] = []
     for collection in dates {
@@ -115,26 +156,7 @@ internal extension MyCalendarViewModel {
     }
     dates = datesTmp
     selectedDate = model.date
-    activeMonthDatePublisher.send(model.date)
-  }
-  
-  func selectDate(with date: Date) {
-    let month = generator.calendar
-      .component(.month, from: date)
-    let monthData = generator.generateMonthData(for: month)
-    
-    let year = generator.calendar
-      .component(.year, from: date)
-    let yearData = generator.generateYearData(for: year)
-    
-    monthYear = .init(month: monthData, year: yearData)
-    selectedDate = date
-    generateDaysCollectionPage(for: date)
-    activeMonthDatePublisher.send(date)
-  }
-  
-  func updatePickerMonthYear() {
-    pickerModel.updateMonthYear(with: monthYear)
+    selectedDayPublisher.send(model)
   }
 }
 
@@ -174,5 +196,20 @@ private extension MyCalendarViewModel {
                                                               selectedDate: selectedDate,
                                                               enableFutureWeeksOfCurrentMonth: enableFutureWeeksOfCurrentMonth,
                                                               enableFutureDateOnCurrentMonth: enableFutureDateOnCurrentMonth)
+  }
+  
+  func updateRowState(of collections: [DaysRowModel], with model: DayModel, rowState state: RowStateProtocol) -> [DaysRowModel] {
+    return collections.map { collection in
+      return collection.id == model.id ? collection.updateRowState(with: state) : collection
+    }
+  }
+  
+  func updateRowState(of collections: [DaysRowModel], with date: Date, rowState state: RowStateProtocol) -> [DaysRowModel] {
+    return collections.map { collection in
+      for row in collection.rows where generator.calendar.isDate(row.date, inSameDayAs: date) {
+        return collection.updateRowState(with: state)
+      }
+      return collection
+    }
   }
 }
